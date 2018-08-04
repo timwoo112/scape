@@ -4,11 +4,11 @@ var bodyParser = require('body-parser');
 var mongoose = require ('mongoose');
 
 //connect to mongoose
-mongoose.connect('mongodb://localhost.bookstore');
+mongoose.connect('mongodb://localhost.world', { useNewUrlParser: true });
 var db = mongoose.connection;
 
 app.get('/', function(req, res){
-  res.send('Hello world!');
+  res.send('Please use /api/world');
 });
 
 app.listen(3000);

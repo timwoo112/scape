@@ -42,7 +42,7 @@ function readMoney(){
     });
   });
 }
-// Read location function. Returns and array of coordinates. 
+// Read location function. Returns an array of coordinates.
 function readLocation(){
   MongoClient.connect(url, function(err, client) {
     assert.equal(null, err);
@@ -57,6 +57,33 @@ function readLocation(){
     });
   });
 }
+
+// Change location function. Takes latitude and longitude variables.
+// This needs to be optimized so that both latitude and longitude are in an array.
+function changeLocation(lat, long){
+  MongoClient.connect(url, function(err, client) {
+    assert.equal(null, err);
+    const db = client.db(dbName);
+    //put commands under this line
+    console.log("Connected successfully to server");
+
+    var myquery = { name: "Tim" };
+    var latitude = {$set: {lat: lat} };
+    var longitude = {$set: {long: long} };
+    db.collection("player").updateOne(myquery, latitude, function(err, res) {
+      if (err) throw err;
+      console.log("Changed the latitude successfully");
+    });
+    db.collection("player").updateOne(myquery, longitude, function(err, res) {
+      if (err) throw err;
+      console.log("Changed the longitude successfully");
+    });
+
+    client.close();
+  });
+}
+
 addMoney(1234);
 readMoney();
 readLocation();
+changeLocation(123,456);

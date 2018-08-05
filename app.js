@@ -42,5 +42,21 @@ function readMoney(){
     });
   });
 }
+// Read location function. Returns and array of coordinates. 
+function readLocation(){
+  MongoClient.connect(url, function(err, client) {
+    assert.equal(null, err);
+    const db = client.db(dbName);
+    //put commands under this line
+    console.log("Connected successfully to server");
+
+      db.collection("player").findOne({}, function(err, result) {
+      if (err) throw err;
+      console.log(result.location);
+      client.close();
+    });
+  });
+}
 addMoney(1234);
 readMoney();
+readLocation();

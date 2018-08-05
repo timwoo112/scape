@@ -28,6 +28,7 @@ function addMoney(amount){
 }
 
 // Function that reads the current amount of money player has.
+// Just prints it to the console for now.
 function readMoney(){
   MongoClient.connect(url, function(err, client) {
     assert.equal(null, err);
@@ -42,6 +43,7 @@ function readMoney(){
     });
   });
 }
+
 // Read location function. Returns an array of coordinates.
 function readLocation(){
   MongoClient.connect(url, function(err, client) {
@@ -59,7 +61,7 @@ function readLocation(){
 }
 
 // Change location function. Takes latitude and longitude variables.
-// This needs to be optimized so that both latitude and longitude are in an array.
+// I would like to update schema so that both latitude and longitude are in an array.
 function changeLocation(lat, long){
   MongoClient.connect(url, function(err, client) {
     assert.equal(null, err);
@@ -83,6 +85,7 @@ function changeLocation(lat, long){
   });
 }
 
+// This is where I call all of the functions just to test them
 addMoney(1234);
 readMoney();
 readLocation();

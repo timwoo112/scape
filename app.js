@@ -1,3 +1,6 @@
+// Tim Woolley 2018
+// This file provides interaction to the mongodb server
+
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 
@@ -22,7 +25,7 @@ function addMoney(amount){
       if (err) throw err;
       console.log("1 document updated");
     });
-
+    console.log("Closing connection.")
     client.close();
   });
 }
@@ -39,6 +42,7 @@ function readMoney(){
       db.collection("player").findOne({}, function(err, result) {
       if (err) throw err;
       console.log(result.money);
+      console.log("Closing connection.")
       client.close();
     });
   });
@@ -55,6 +59,7 @@ function readLocation(){
       db.collection("player").findOne({}, function(err, result) {
       if (err) throw err;
       console.log(result.location);
+      console.log("Closing connection.")
       client.close();
     });
   });
@@ -80,13 +85,13 @@ function changeLocation(lat, long){
       if (err) throw err;
       console.log("Changed the longitude successfully");
     });
-
+    console.log("Closing connection.")
     client.close();
   });
 }
 
 // This is where I call all of the functions just to test them
-addMoney(1234);
+addMoney(-23);
 readMoney();
 readLocation();
 changeLocation(123,456);

@@ -3,8 +3,8 @@ var app = express();
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var player = require('./player.model');
-var port = 8080;
-var db = 'mongodb+srv://twoolley:test@cluster0-jjfxc.mongodb.net/world_state'
+var port = 8000;
+var db = 'mongodb+srv://twoolley:test@cluster0-jjfxc.mongodb.net/world_state?retryWrites=true'
 
 mongoose.connect(db);
 
@@ -14,7 +14,7 @@ app.get('/', function(req, res) {
 
 app.get('/', function(req, res) {
   console.log('getting all players');
-  player.find({name: "Tim"}).exec(function (err, result){
+  player.find({}).exec(function (err, result){
     if(err){
       res.send('error');
     }else{

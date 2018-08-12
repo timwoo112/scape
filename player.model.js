@@ -1,12 +1,10 @@
-'use strict';
-
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var PlayerSchema = new Schema({
   name: String,
-  money: Number,
-  long: Number,
-  lat: Number
+  money: String,
+  long: String,
+  lat: String
 })
-module.exports = mongoose.mode('Player', PlayerSchema);
+module.exports = mongoose.model('player', PlayerSchema);

@@ -9,73 +9,120 @@ const url = 'mongodb+srv://twoolley:test@cluster0-jjfxc.mongodb.net/test?retryWr
 // Database Name
 const dbName = 'world_state';
 
-// Player connection instance
-function playerConnect(name){
+// Start server with player's name
+function playerConnect(nameOfPlayer) {
   MongoClient.connect(url, function(err, client) {
     assert.equal(null, err);
-    //Connecting to the server.
-    const playerName = name;
+    /* Variables */
+    const playerName = nameOfPlayer;
     const db = client.db(dbName);
+    var playerLat = 0;
+    var playerLong = 0;
+    var myquery = { name: playerName };
 
-    // This function allows you to update the player's money.
-    // It takes an integer variable that is the new amount.
-    function addMoney(amount){
-        //put commands under this line
-        var myquery = { name: playerName };
-        var newvalues = {$set: {money: amount} };
-        db.collection("player").updateOne(myquery, newvalues, function(err, res) {
-          if (err) throw err;
-          console.log("1 document updated");
-        });
-    }
-    addMoney(45);
-    // Function that reads the current amount of money player has.
-    // Just prints it to the console for now.
-    function readMoney(){
-        //put commands under this line
-          var myquery = { name: playerName };
-          db.collection("player").findOne(myquery, function(err, result) {
-            if (err) throw err;
-            console.log(result.money);
-        });
-    }
-    readMoney();
-    // Read location function. Returns an array of coordinates.
-    function readLocation(){
-          var myquery = { name: playerName };
-          db.collection("player").findOne(myquery, function(err, result) {
-            if (err) throw err;
-            console.log(result.long);
-            console.log(result.lat);
-        });
-    }
-    readLocation();
+    // Player Object
+    function playerObject(name, money, playerLatitude, playerLongitude) {
+      this.name = name;
+      this.money = money;
+      this.playerLatitude = playerLatitude;
+      this.playerLongitude = playerLongitude;
 
-    // Change location function. Takes latitude and longitude variables.
-    // I would like to update schema so that both latitude and longitude are in an array.
-    function changeLocation(lat, long){
-        var myquery = { name: "Tim" };
-        var latitude = {$set: {lat: lat} };
-        var longitude = {$set: {long: long} };
-        db.collection("player").updateOne(myquery, latitude, function(err, res) {
-          if (err) throw err;
-          console.log("Changed the latitude successfully");
-        });
-        db.collection("player").updateOne(myquery, longitude, function(err, res) {
-          if (err) throw err;
-          console.log("Changed the longitude successfully");
-        });
+      this.sayName = function() {
+        console.log(`I am ` + name)
+      }
     }
-     console.log("Closing Connection");
-     client.close();
- });
+
+
+    /* GET FUNCTIONS */
+    function getMoney() {
+      var amount = 0;
+      //put commands under this line
+      db.collection("player").findOne(myquery, function(err, result) {
+        if (err)
+          throw err;
+        amount = result.money;
+        console.log("The amount is " + amount);
+      });
+      return amount;
+    }
+    function getLatitude() {
+      db.collection("player").findOne(myquery, function(err, result) {
+        if (err)
+          throw err;
+        return result.lat;
+      });
+    }
+    function getLongitude() {
+      db.collection("player").findOne(myquery, function(err, result) {
+        if (err)
+          throw err;
+        return result.long;
+      });
+    }
+
+    /* PUT FUNCTIONS */
+    function changeLocation(lat, long) {
+      var latitude = {
+        $set: {
+          lat: lat
+        }
+      };
+      var longitude = {
+        $set: {
+          long: long
+        }
+      };
+      db.collection("player").updateOne(myquery, latitude, function(err, res) {
+        if (err)
+          throw err;
+        console.log("Changed the latitude successfully");
+      });
+      db.collection("player").updateOne(myquery, longitude, function(err, res) {
+        if (err)
+          throw err;
+        console.log("Changed the longitude successfully");
+      });
+    }
+    function addMoney(amount) {
+      //put commands under this line
+      var myquery = {
+        name: playerName
+      };
+      var newvalues = {
+        $set: {
+          money: amount
+        }
+      };
+      db.collection("player").updateOne(myquery, newvalues, function(err, res) {
+        if (err)
+          throw err;
+        console.log("1 document updated");
+      });
+    }
+
+    //Start player instance
+    var playerInstance = new playerObject(playerName);
+
+
+    playerInstance.sayName();
+    playerInstance.money = getMoney();
+    playerInstance.playerLatitude = getLatitude();
+    playerInstance.playerLongitude = getLongitude();
+
+    console.log(playerInstance.name);
+    console.log(playerInstance.money);
+    console.log(playerInstance.playerLatitude);
+    console.log(playerInstance.playerLongitude);
+    // Close the connection
+    console.log("Closing Connection");
+    client.close();
+  });
 }
- playerConnect("Char");
-  // This is where I call all of the functions just to test them
-  /*
+playerConnect("Char");
+// This is where I call all of the functions just to test them
+/*
   addMoney(-23);
   readMoney();
   readLocation();
   changeLocation(123,456);
   */
-  // close MongoClient

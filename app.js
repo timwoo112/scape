@@ -1,97 +1,81 @@
 // Tim Woolley 2018
 // This file provides interaction to the mongodb server
 
-const MongoClient = require('mongodb').MongoClient;
+const MongoClient = require('mongodb');
 const assert = require('assert');
 
 // Connection URL
 const url = 'mongodb+srv://twoolley:test@cluster0-jjfxc.mongodb.net/test?retryWrites=true';
-
 // Database Name
 const dbName = 'world_state';
 
-// This function allows you to update the player's money.
-// It takes an integer variable that is the new amount.
-function addMoney(amount){
+// Player connection instance
+function playerConnect(name){
   MongoClient.connect(url, function(err, client) {
     assert.equal(null, err);
+    //Connecting to the server.
+    const playerName = name;
     const db = client.db(dbName);
-    //put commands under this line
-    console.log("Connected successfully to server");
 
-    var myquery = { name: "Tim" };
-    var newvalues = {$set: {money: amount} };
-    db.collection("player").updateOne(myquery, newvalues, function(err, res) {
-      if (err) throw err;
-      console.log("1 document updated");
-    });
-    console.log("Closing connection.")
-    client.close();
-  });
+    // This function allows you to update the player's money.
+    // It takes an integer variable that is the new amount.
+    function addMoney(amount){
+        //put commands under this line
+        var myquery = { name: playerName };
+        var newvalues = {$set: {money: amount} };
+        db.collection("player").updateOne(myquery, newvalues, function(err, res) {
+          if (err) throw err;
+          console.log("1 document updated");
+        });
+    }
+    addMoney(45);
+    // Function that reads the current amount of money player has.
+    // Just prints it to the console for now.
+    function readMoney(){
+        //put commands under this line
+          var myquery = { name: playerName };
+          db.collection("player").findOne(myquery, function(err, result) {
+            if (err) throw err;
+            console.log(result.money);
+        });
+    }
+    readMoney();
+    // Read location function. Returns an array of coordinates.
+    function readLocation(){
+          var myquery = { name: playerName };
+          db.collection("player").findOne(myquery, function(err, result) {
+            if (err) throw err;
+            console.log(result.long);
+            console.log(result.lat);
+        });
+    }
+    readLocation();
+
+    // Change location function. Takes latitude and longitude variables.
+    // I would like to update schema so that both latitude and longitude are in an array.
+    function changeLocation(lat, long){
+        var myquery = { name: "Tim" };
+        var latitude = {$set: {lat: lat} };
+        var longitude = {$set: {long: long} };
+        db.collection("player").updateOne(myquery, latitude, function(err, res) {
+          if (err) throw err;
+          console.log("Changed the latitude successfully");
+        });
+        db.collection("player").updateOne(myquery, longitude, function(err, res) {
+          if (err) throw err;
+          console.log("Changed the longitude successfully");
+        });
+    }
+     console.log("Closing Connection");
+     client.close();
+ });
 }
-
-// Function that reads the current amount of money player has.
-// Just prints it to the console for now.
-function readMoney(){
-  MongoClient.connect(url, function(err, client) {
-    assert.equal(null, err);
-    const db = client.db(dbName);
-    //put commands under this line
-    console.log("Connected successfully to server");
-
-      db.collection("player").findOne({}, function(err, result) {
-      if (err) throw err;
-      console.log(result.money);
-      console.log("Closing connection.")
-      client.close();
-    });
-  });
-}
-
-// Read location function. Returns an array of coordinates.
-function readLocation(){
-  MongoClient.connect(url, function(err, client) {
-    assert.equal(null, err);
-    const db = client.db(dbName);
-    //put commands under this line
-    console.log("Connected successfully to server");
-
-      db.collection("player").findOne({}, function(err, result) {
-      if (err) throw err;
-      console.log(result.location);
-      console.log("Closing connection.")
-      client.close();
-    });
-  });
-}
-
-// Change location function. Takes latitude and longitude variables.
-// I would like to update schema so that both latitude and longitude are in an array.
-function changeLocation(lat, long){
-  MongoClient.connect(url, function(err, client) {
-    assert.equal(null, err);
-    const db = client.db(dbName);
-    //put commands under this line
-    console.log("Connected successfully to server");
-
-    var myquery = { name: "Tim" };
-    var latitude = {$set: {lat: lat} };
-    var longitude = {$set: {long: long} };
-    db.collection("player").updateOne(myquery, latitude, function(err, res) {
-      if (err) throw err;
-      console.log("Changed the latitude successfully");
-    });
-    db.collection("player").updateOne(myquery, longitude, function(err, res) {
-      if (err) throw err;
-      console.log("Changed the longitude successfully");
-    });
-    console.log("Closing connection.")
-    client.close();
-  });
-}
-
-// This is where I call all of the functions just to test them
-addMoney(-23);
-readMoney();
-readLocation();
-changeLocation(123,456);
+ playerConnect("Char");
+  // This is where I call all of the functions just to test them
+  /*
+  addMoney(-23);
+  readMoney();
+  readLocation();
+  changeLocation(123,456);
+  */
+  // close MongoClient

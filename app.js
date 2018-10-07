@@ -4,8 +4,8 @@ const MongoClient = require('mongodb').MongoClient;
 var rp = require('request-promise');
 const assert = require('assert');
 const Player = require('./Player.js');
-
-let user = new Player("Tim", 5);
+var keepPlayingBool = true;
+let user = new Player();
 console.log("***START***");
 
 // Get the player data using a promise and set the value to the user object

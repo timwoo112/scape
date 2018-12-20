@@ -45,6 +45,10 @@ class Player {
       });
     });
   }
+
+  savePlayerData() {
+    
+  }
 }
 
 module.exports = Player;

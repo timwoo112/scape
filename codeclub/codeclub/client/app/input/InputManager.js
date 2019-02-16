@@ -35,6 +35,7 @@ export default class InputManager {
       if (ev.key == 'd') {
         if (this.app.playerPosition.x < this.app.mapBounds.x - 20) {
           this.app.networkManager.send({id: "move", msg: "moved right"});
+          console.log("Just testing out my commit")
         } else{
           console.log("This is out of bounds");
         }

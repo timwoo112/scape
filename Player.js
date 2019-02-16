@@ -47,7 +47,7 @@ class Player {
   }
 
   savePlayerData() {
-    
+    console.log("This does nothing I just didn't want it to break.");
   }
 }
 

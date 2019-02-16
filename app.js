@@ -28,19 +28,7 @@ user.getPlayerData().then(function(value) {
 
 }, function(err) {
   console.log("There was an error " + err);
-}).then(function() { // I can probably put a game loop in here
-  console.log("Second addition to the promise");
-  var x = 0
-  // Do something every 3 seconds. Runs in parallel with below.
-  setInterval(function() {
-    console.log(user.playerDataArray);
-  }, 3000);
-  // Do something every 5 seconds. Runs in parralel with above.
-  setInterval(function() {
-    console.log("Parallel task");
-  }, 5000);
-}).then(function() {
-  console.log("I didn't think this would ever get ran, but it does...");
 });
+
 
 console.log("This is on the last line but gets ran first while waiting for callback from mongo server.");

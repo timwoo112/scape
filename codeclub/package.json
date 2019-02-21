@@ -1,0 +1,19 @@
+{
+  "name": "webstarter-simple",
+  "version": "0.1.0",
+  "license": "MIT",
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "tim": "echo 'Tim is the best'",
+    "tim_test": "echo 'this is a test'",
+    "common_build": "yarn --cwd ./common build",
+    "common_dev": "yarn --cwd ./common dev",
+    "client_dev": "yarn --cwd ./client dev",
+    "server_dev": "yarn --cwd ./server dev",
+    "dev": "yarn common_build && concurrently 'yarn common_dev' 'yarn client_dev' 'yarn server_dev'"
+  },
+  "dependencies": {
+    "concurrently": "^4.1.0",
+    "lerna": "^3.5.1"
+  }
+}
